@@ -3,6 +3,7 @@
 
 ## Loading and preprocessing the data
 
+We have loaded and preprocessed the data.
 
 ```r
 activityData <- read.csv("activity.csv") # loading data
@@ -10,6 +11,8 @@ activityData[, 2] = as.Date(activityData[, 2]) # date data to date format
 ```
 
 ## What is mean total number of steps taken per day?
+
+We have calculated total number of steps taken each day. A histogram of the total number of steps taken each day is shown below.
 
 
 ```r
@@ -31,6 +34,8 @@ median <- median(stepsPerDay)
 The **mean** and **median** total number of steps taken per day are 9354.2295 and 10395 respectively.
 
 ## What is the average daily activity pattern?
+
+We have calculated the average number of steps taken, averaged across all days. A time series plot of the 5-minute interval and the average number of steps taken, averaged across all days is shown below.
 
 
 ```r
@@ -63,7 +68,10 @@ As you can see from the plot above the 835-th 5-minute interval, on average acro
 naValues <- sum(is.na(activityData$steps)) # calculating total number of missing values in the dataset
 ```
 
-The total number of missing values in the dataset (i.e. the total number of rows with NAs) is equal to 2304.
+We have calculated the total number of missing values in the dataset (i.e. the total number of rows with NAs). It is equal to 2304.
+
+We have replaced all the missing values in **steps** variable in the dataset with the mean value for that day. If there were no steps data available throughout that day we replaced it with overall interval mean throughout the whole dataset.  
+A histogram of the total number of steps taken each day plotted out of new dataset is shown below.
 
 
 ```r
@@ -102,13 +110,13 @@ meanDif <- abs(newMean - mean) * 200/(mean + newMean)
 medianDif <- abs(newMedian - median) * 200/(median + newMedian)
 ```
 
-We have replaced all the missing values in **steps** variable in the dataset with the mean value for that day. If there were no steps data available throughout that day we replaced used overall interval mean throughout whole dataset.
-
 We have recalculated **mean** and **median** of total number of steps taken per day for the new dataset. Here are corresponding values: 1.0766 &times; 10<sup>4</sup>, 1.0766 &times; 10<sup>4</sup>.
 
 These values differ from the estimates from the first part of the assignment (which were: 9354.2295 and 10395) by 14.0351% (mean difference) and 3.5082% (median difference). Imputing missing data have slightly increased the estimates of the total daily number of steps.
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+We have made two plots containing a time series plots of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days and weekend days (y-axis). They are showed below.
 
 
 ```r

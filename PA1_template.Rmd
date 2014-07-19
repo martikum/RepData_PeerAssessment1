@@ -3,6 +3,7 @@
 
 ## Loading and preprocessing the data
 
+We have loaded and preprocessed the data.
 ```{r loadingData}
 activityData <- read.csv("activity.csv") # loading data
 activityData[, 2] = as.Date(activityData[, 2]) # date data to date format
@@ -10,7 +11,9 @@ activityData[, 2] = as.Date(activityData[, 2]) # date data to date format
 
 ## What is mean total number of steps taken per day?
 
-```{r meanSteps, warning=FALSE}
+We have calculated total number of steps taken each day. A histogram of the total number of steps taken each day is shown below.
+
+```{r meanSteps}
 ## calculating total number of steps taken each day
 stepsPerDay <- tapply(activityData$steps, activityData$date, function(x) {sum(x, na.rm=TRUE)})
 
@@ -25,6 +28,8 @@ median <- median(stepsPerDay)
 The **mean** and **median** total number of steps taken per day are `r mean` and `r median` respectively.
 
 ## What is the average daily activity pattern?
+
+We have calculated the average number of steps taken, averaged across all days. A time series plot of the 5-minute interval and the average number of steps taken, averaged across all days is shown below.
 
 ```{r averageDailyAct}
 
@@ -54,7 +59,10 @@ As you can see from the plot above the `r maxInterval`-th 5-minute interval, on 
 naValues <- sum(is.na(activityData$steps)) # calculating total number of missing values in the dataset
 ```
 
-The total number of missing values in the dataset (i.e. the total number of rows with NAs) is equal to `r naValues`.
+We have calculated the total number of missing values in the dataset (i.e. the total number of rows with NAs). It is equal to `r naValues`.
+
+We have replaced all the missing values in **steps** variable in the dataset with the mean value for that day. If there were no steps data available throughout that day we replaced it with overall interval mean throughout the whole dataset.  
+A histogram of the total number of steps taken each day plotted out of new dataset is shown below.
 
 ```{r replacingValues}
 newActivityData = activityData # copying dataset
@@ -88,13 +96,13 @@ meanDif <- abs(newMean - mean) * 200/(mean + newMean)
 medianDif <- abs(newMedian - median) * 200/(median + newMedian)
 ```
 
-We have replaced all the missing values in **steps** variable in the dataset with the mean value for that day. If there were no steps data available throughout that day we replaced used overall interval mean throughout whole dataset.
-
 We have recalculated **mean** and **median** of total number of steps taken per day for the new dataset. Here are corresponding values: `r newMean`, `r newMedian`.
 
 These values differ from the estimates from the first part of the assignment (which were: `r mean` and `r median`) by `r meanDif`% (mean difference) and `r medianDif`% (median difference). Imputing missing data have slightly increased the estimates of the total daily number of steps.
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+We have made two plots containing a time series plots of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days and weekend days (y-axis). They are showed below.
 
 ```{r activityPatterns}
 ## function returning "weekday" for Mo-Fr and "weekend" for Sa-Su
