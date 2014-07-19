@@ -3,31 +3,37 @@
 
 ## Loading and preprocessing the data
 
-```{r loadingData}
+
+```r
 activityData <- read.csv("activity.csv") # loading data
 activityData[, 2] = as.Date(activityData[, 2]) # date data to date format
 ```
 
 ## What is mean total number of steps taken per day?
 
-```{r meanSteps, warning=FALSE}
+
+```r
 ## calculating total number of steps taken each day
 stepsPerDay <- tapply(activityData$steps, activityData$date, function(x) {sum(x, na.rm=TRUE)})
 
 ## plotting histogram
 barplot(stepsPerDay)
+```
 
+![plot of chunk meanSteps](figure/meanSteps.png) 
+
+```r
 ## calculating mean and median total number of steps taken per day
 mean <- mean(stepsPerDay)
 median <- median(stepsPerDay)
 ```
 
-The **mean** and **median** total number of steps taken per day are `r mean` and `r median` respectively.
+The **mean** and **median** total number of steps taken per day are 9354.2295 and 10395 respectively.
 
 ## What is the average daily activity pattern?
 
-```{r averageDailyAct}
 
+```r
 ## calculating the average number of steps taken, averaged across all days
 stepsPerInt <- tapply(activityData$steps, activityData$interval, function(x) {mean(x, na.rm=TRUE)})
 
@@ -46,17 +52,21 @@ abline(h=maxSteps,col="blue",lty=2)
 abline(v=maxInterval,col="blue",lty=2)
 ```
 
-As you can see from the plot above the `r maxInterval`-th 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps of `r maxSteps`.
+![plot of chunk averageDailyAct](figure/averageDailyAct.png) 
+
+As you can see from the plot above the 835-th 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps of 206.1698.
 
 ## Imputing missing values
 
-```{r missingValues}
+
+```r
 naValues <- sum(is.na(activityData$steps)) # calculating total number of missing values in the dataset
 ```
 
-The total number of missing values in the dataset (i.e. the total number of rows with NAs) is equal to `r naValues`.
+The total number of missing values in the dataset (i.e. the total number of rows with NAs) is equal to 2304.
 
-```{r replacingValues}
+
+```r
 newActivityData = activityData # copying dataset
 meanStepsPerDay <- tapply(activityData$steps, activityData$date, function(x) {mean(x, na.rm=TRUE)}) # calculating mean steps per day
 numRows <- length(activityData$steps)
@@ -78,7 +88,11 @@ newStepsPerDay <- tapply(newActivityData$steps, newActivityData$date, function(x
 
 ## plotting histogram
 barplot(newStepsPerDay)
+```
 
+![plot of chunk replacingValues](figure/replacingValues.png) 
+
+```r
 ## calculating new mean and median
 newMean <- mean(newStepsPerDay)
 newMedian <- median(newStepsPerDay)
@@ -90,13 +104,14 @@ medianDif <- abs(newMedian - median) * 200/(median + newMedian)
 
 We have replaced all the missing values in **steps** variable in the dataset with the mean value for that day. If there were no steps data available throughout that day we replaced used overall interval mean throughout whole dataset.
 
-We have recalculated **mean** and **median** of total number of steps taken per day for the new dataset. Here are corresponding values: `r newMean`, `r newMedian`.
+We have recalculated **mean** and **median** of total number of steps taken per day for the new dataset. Here are corresponding values: 1.0766 &times; 10<sup>4</sup>, 1.0766 &times; 10<sup>4</sup>.
 
-These values differ from the estimates from the first part of the assignment (which were: `r mean` and `r median`) by `r meanDif`% (mean difference) and `r medianDif`% (median difference). Imputing missing data have slightly increased the estimates of the total daily number of steps.
+These values differ from the estimates from the first part of the assignment (which were: 9354.2295 and 10395) by 14.0351% (mean difference) and 3.5082% (median difference). Imputing missing data have slightly increased the estimates of the total daily number of steps.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r activityPatterns}
+
+```r
 ## function returning "weekday" for Mo-Fr and "weekend" for Sa-Su
 weekDayIndicator <- function(x) {
         if(weekdays(x) == "суббота" || weekdays(x) == "воскресенье") return("weekend")
@@ -110,9 +125,14 @@ newActivityData$weekday <- as.factor(newActivityData$weekday)
 ## calculating the average number of steps taken, averaged across all weekday days and plotting corresponding histogram
 newStepsPerIntWeekday <- tapply(newActivityData[newActivityData$weekday == "weekday", 1], newActivityData[newActivityData$weekday == "weekday", 3], function(x) {mean(x, na.rm=TRUE)})
 plot(intervals, newStepsPerIntWeekday, type = "l", xlab = "Interval", ylab="Number of steps on weekdays",)
+```
 
+![plot of chunk activityPatterns](figure/activityPatterns1.png) 
+
+```r
 ## calculating the average number of steps taken, averaged across all weekend days and plotting corresponding histogram
 newStepsPerIntWeekend <- tapply(newActivityData[newActivityData$weekday == "weekend", 1], newActivityData[newActivityData$weekday == "weekend", 3], function(x) {mean(x, na.rm=TRUE)})
 plot(intervals, newStepsPerIntWeekend, type = "l", xlab = "Interval", ylab="Number of steps on weekends",)
-
 ```
+
+![plot of chunk activityPatterns](figure/activityPatterns2.png) 
